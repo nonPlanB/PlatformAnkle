@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/obj/B.obj</file>
+        <file>assets/obj/M.obj</file>
+        <file>assets/obj/L.obj</file>
+        <file>assets/obj/P.obj</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>shaders/ads.frag</file>
+        <file>shaders/ads.vert</file>
+        <file>shaders/shadowmap.frag</file>
+        <file>shaders/shadowmap.vert</file>
+        <file>shaders/es3/ads.frag</file>
+        <file>shaders/es3/ads.vert</file>
+        <file>shaders/es3/shadowmap.frag</file>
+        <file>shaders/es3/shadowmap.vert</file>
+        <file>AdsEffect.qml</file>
+        <file>AdsMaterial.qml</file>
+        <file>ShadowMapFrameGraph.qml</file>
+        <file>ShadowMapLight.qml</file>
+        <file>RightSceneRoot.qml</file>
+        <file>B.qml</file>
+        <file>P.qml</file>
+        <file>M1.qml</file>
+        <file>L3.qml</file>
+        <file>M2.qml</file>
+        <file>M3.qml</file>
+        <file>MyFunction.js</file>
+        <file>L2.qml</file>
+        <file>L1.qml</file>
+    </qresource>
+</RCC>
