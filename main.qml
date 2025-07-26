@@ -235,6 +235,125 @@ ApplicationWindow {
                     return MF.findM3(p3, rollslider.value, yawslider.value, pitchslider.value);
                 }
             }
+            //WiFi输入框
+            Rectangle {
+                width: 180
+                height: 180
+                color: "#EDF7FF"
+                radius: 12
+                Column {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    spacing: 5
+                    Text {
+                        text: "Wi-Fi Setting"
+                        font.family: "Calibri"
+                        font.pointSize: 13
+                        color: "black"
+                    }
+                    TextField {
+                        id: wifiSsid
+                        width: parent.width
+                        placeholderText: "Wi-Fi SSID"
+                        font.family: "Calibri"
+                        font.pointSize: 12
+                    }
+                    TextField {
+                        id: wifiPassword
+                        width: parent.width
+                        placeholderText: "Wi-Fi Password"
+                        font.family: "Calibri"
+                        font.pointSize: 12
+                        echoMode: TextInput.Password
+                    }
+                    Button {
+                        id: wifiConnectButton
+                        text: "Connect to Wi-Fi"
+                        width: parent.width
+                        onClicked: {
+                            networkManager.connectToWifi(wifiSsid.text, wifiPassword.text)
+                        }
+                    }
+                    Text {
+                        id: wifiStatusText
+                        width: parent.width
+                        text: "Wi-Fi Disconnect"
+                        font.family: "Calibri"
+                        font.pointSize: 10
+                        color: "black"
+                        wrapMode: Text.Wrap
+                    }
+                }
+            }
+            //TCP输入框
+            Rectangle {
+                width: 180
+                height: 180
+                color: "#EDF7FF"
+                radius: 12
+                Column {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    spacing: 5
+                    Text {
+                        text: "TCP Setting"
+                        font.family: "Calibri"
+                        font.pointSize: 13
+                        color: "black"
+                    }
+                    TextField {
+                        id: tcpIp
+                        width: parent.width
+                        placeholderText: "TCP IP (e.g., 192.168.1.100)"
+                        font.family: "Calibri"
+                        font.pointSize: 12
+                        //IP地址验证
+                        validator: RegularExpressionValidator { regularExpression: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/ }
+                    }
+                    TextField {
+                        id: tcpPort
+                        width: parent.width
+                        placeholderText: "TCP Port (e.g., 8080)"
+                        font.family: "Calibri"
+                        font.pointSize: 12
+                        //端口验证
+                        validator: IntValidator { bottom: 1; top: 65535 }
+                    }
+                    Button {
+                        id: tcpConnectButton
+                        text: "Connect to TCP"
+                        width: parent.width
+                        //IP和端口输入有效时启用
+                        enabled: tcpIp.acceptableInput && tcpPort.acceptableInput
+                        onClicked: {
+                            networkManager.connectToTcp(tcpIp.text, parseInt(tcpPort.text))
+                        }
+                    }
+                    Text {
+                        id: tcpStatusText
+                        width: parent.width
+                        text: "TCP Disconnect"
+                        font.family: "Calibri"
+                        font.pointSize: 10
+                        color: "black"
+                        wrapMode: Text.Wrap
+                    }
+                }
+            }
+            Connections {
+                target: networkManager
+                function onWifiConnectionStatus(success, message) {
+                    wifiStatusText.text = message
+                    wifiStatusText.color = success ? "green" : "red"
+                }
+                function onTcpConnectionStatus(success, message) {
+                    tcpStatusText.text = message
+                    tcpStatusText.color = success ? "green" : "red"
+                }
+                function onTcpDataReceived(data) {
+                    console.log("Received TCP data: " + data)
+                }
+            }
         }
     }
     RowLayout {

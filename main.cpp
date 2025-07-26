@@ -3,18 +3,21 @@
 #include <QQmlContext>
 #include <QProcess>
 #include "pythonhandler.h"
+#include "networkmanager.h"
 
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
     QString exePath = "D:/Afoot/SDK/LightVista/LightVista.exe";
 
-    QProcess process;
-    process.start(exePath, QStringList());
+    // QProcess process;
+    // process.start(exePath, QStringList());
 
     // 创建并初始化 PythonHandler 实例
     PythonHandler *pyHandler = new PythonHandler;
     pyHandler->initialize();
+
+    NetworkManager *networkManager = new NetworkManager;
 
     int ch_num;
     QList<int> ch_no;
@@ -30,6 +33,7 @@ int main(int argc, char **argv)
     // 启动 QML 引擎，并传递 PythonHandler 实例
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("pyHandler", pyHandler);
+    engine.rootContext()->setContextProperty("networkManager", networkManager);
     engine.load(QUrl("qrc:/main.qml"));
     if (engine.rootObjects().isEmpty())
         return -1;

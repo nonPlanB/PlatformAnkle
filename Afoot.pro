@@ -1,4 +1,4 @@
-QT += qml quick widgets 3dcore 3drender 3dinput charts 3dquick concurrent
+QT += qml quick widgets 3dcore 3drender 3dinput charts 3dquick concurrent network
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -6,6 +6,7 @@ QT += qml quick widgets 3dcore 3drender 3dinput charts 3dquick concurrent
 
 SOURCES += \
         main.cpp \
+        networkmanager.cpp \
         pythonhandler.cpp
 
 RESOURCES += qml.qrc \
@@ -23,6 +24,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    networkmanager.h \
     pythonhandler.h
 
 DISTFILES +=
