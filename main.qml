@@ -21,6 +21,8 @@ ApplicationWindow {
     property font chartTitle: Qt.font({ family: "Calibri", pointSize: 16 })
     property font axisTitle: Qt.font({ family: "Calibri", pointSize: 14 })
     property var chData: ({1: [], 2: [], 3: []})
+    property int rspeed: 50
+    property int rmode: 0
     Rectangle {
         id: controlsbg
         width: 200
@@ -116,6 +118,38 @@ ApplicationWindow {
                     from: -10
                     to: 10
                     stepSize: 1
+                }
+            }
+            Rectangle {
+                id: speed
+                width: 180
+                height: 60
+                color: "#EDF7FF"
+                radius: 12
+                Text {
+                    id: speedSliderText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 10
+                    text: "Speed: " + rspeed
+                    font.family: "Calibri"
+                    color: "black"
+                    font.pointSize: 13
+                }
+                Slider {
+                    id: speedslider
+                    anchors.fill: parent
+                    anchors.topMargin: 30
+                    anchors.rightMargin: 10
+                    anchors.leftMargin: 10
+                    handle.scale: 0.7
+                    value: 50
+                    from: 1
+                    to: 100
+                    stepSize: 1
+                    onValueChanged: {
+                        root.rspeed = value;
+                    }
                 }
             }
             Rectangle {
@@ -352,6 +386,68 @@ ApplicationWindow {
                 }
                 function onTcpDataReceived(data) {
                     console.log("Received TCP data: " + data)
+                }
+            }
+            Rectangle {
+                id: mode
+                width: 180
+                height: 160
+                color: "#EDF7FF"
+                radius: 12
+                GridLayout {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    columns: 2
+                    rowSpacing: 1
+                    columnSpacing: 2
+                    Text {
+                        Layout.columnSpan: 2
+                        text: "Mode"
+                        font.family: "Calibri"
+                        font.pointSize: 13
+                        color: "black"
+                    }
+                    RadioButton {
+                        id: modeJk1
+                        text: "JK1"
+                        checked: rmode === 1
+                        onCheckedChanged: if (checked) root.rmode = 1
+                        font.family: "Calibri"
+                        font.pointSize: 10
+                    }
+                    RadioButton {
+                        id: modeJk2
+                        text: "JK2"
+                        checked: rmode === 2
+                        onCheckedChanged: if (checked) root.rmode = 2
+                        font.family: "Calibri"
+                        font.pointSize: 10
+                    }
+                    RadioButton {
+                        id: modeAuto1
+                        text: "AUTO1"
+                        checked: rmode === 3
+                        onCheckedChanged: if (checked) root.rmode = 3
+                        font.family: "Calibri"
+                        font.pointSize: 10
+                    }
+                    RadioButton {
+                        id: modeAuto2
+                        text: "AUTO2"
+                        checked: rmode === 4
+                        onCheckedChanged: if (checked) root.rmode = 4
+                        font.family: "Calibri"
+                        font.pointSize: 10
+                    }
+                    RadioButton {
+                        id: modeClose
+                        text: "CLOSE"
+                        checked: rmode === 10
+                        onCheckedChanged: if (checked) root.rmode = 10
+                        font.family: "Calibri"
+                        font.pointSize: 10
+                        Layout.columnSpan: 2
+                    }
                 }
             }
         }
