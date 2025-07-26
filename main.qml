@@ -277,7 +277,7 @@ ApplicationWindow {
                     Text {
                         id: wifiStatusText
                         width: parent.width
-                        text: "Wi-Fi Disconnect"
+                        text: "Wi-Fi Status"
                         font.family: "Calibri"
                         font.pointSize: 10
                         color: "black"
@@ -304,7 +304,7 @@ ApplicationWindow {
                     TextField {
                         id: tcpIp
                         width: parent.width
-                        placeholderText: "TCP IP (e.g., 192.168.1.100)"
+                        placeholderText: "TCP IP (e.g., 192.168.31.162)"
                         font.family: "Calibri"
                         font.pointSize: 12
                         //IP地址验证
@@ -313,7 +313,7 @@ ApplicationWindow {
                     TextField {
                         id: tcpPort
                         width: parent.width
-                        placeholderText: "TCP Port (e.g., 8080)"
+                        placeholderText: "TCP Port (e.g., 8085)"
                         font.family: "Calibri"
                         font.pointSize: 12
                         //端口验证
@@ -332,7 +332,7 @@ ApplicationWindow {
                     Text {
                         id: tcpStatusText
                         width: parent.width
-                        text: "TCP Disconnect"
+                        text: "TCP Status"
                         font.family: "Calibri"
                         font.pointSize: 10
                         color: "black"

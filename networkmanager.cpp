@@ -3,6 +3,7 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QNetworkProxy>
+#include <QtConcurrent>
 
 NetworkManager::NetworkManager(QObject *parent) : QObject(parent) {
     tcpSocket = new QTcpSocket(this);
@@ -67,16 +68,23 @@ void NetworkManager::connectToWifi(const QString &ssid, const QString &password)
         return;
     }
 
-    // 检查连接状态
-    QProcess checkProcess;
-    checkProcess.start("netsh", QStringList() << "wlan" << "show" << "interfaces");
-    checkProcess.waitForFinished();
-    QString output = checkProcess.readAllStandardOutput();
-    if (output.contains(ssid)) {
-        emit wifiConnectionStatus(true, QString("Connected to %1").arg(ssid));
-    } else {
-        emit wifiConnectionStatus(false, "Wi-Fi connection failed");
-    }
+    // 异步线程5s内检查连接状态
+    QtConcurrent::run([=](){
+        for (int i = 0; i < 5; ++i) {
+            QProcess checkProcess;
+            checkProcess.start("netsh", QStringList() << "wlan" << "show" << "interfaces");
+            checkProcess.waitForFinished();
+            //转化为GBK编码
+            QString output = QString::fromLocal8Bit(checkProcess.readAllStandardOutput());
+            qDebug() << "Netsh output:" << output;
+            if (output.contains(ssid)) {
+                emit wifiConnectionStatus(true, QString("Connected to %1").arg(ssid));
+            } else {
+                emit wifiConnectionStatus(false, "Wi-Fi connection failed");
+            }
+            QThread::msleep(1000);
+        }
+    });
 }
 
 void NetworkManager::connectToTcp(const QString &ip, int port) {
