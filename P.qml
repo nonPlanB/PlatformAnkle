@@ -11,9 +11,9 @@ Entity {
     }
     Transform {
         id:pMeshTransform
-        property real y: yawslider.value
-        property real z: pitchslider.value
-        property real x: rollslider.value
+        property real y: pzAngle
+        property real z: pyAngle
+        property real x: pxAngle
         matrix: {
             var m = Qt.matrix4x4();
             m.scale(0.2);

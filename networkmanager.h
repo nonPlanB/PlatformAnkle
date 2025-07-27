@@ -13,11 +13,13 @@ public:
 public slots:
     void connectToWifi(const QString &ssid, const QString &password);
     void connectToTcp(const QString &ip, int port);
+    void sendControlData(int x, int y, int z, int speed, int mode);
 
 signals:
     void wifiConnectionStatus(bool success, const QString &message);
     void tcpConnectionStatus(bool success, const QString &message);
     void tcpDataReceived(const QString &data);
+    void controlDataReceived(int x, int y, int z);
 
 private slots:
     void onTcpConnected();

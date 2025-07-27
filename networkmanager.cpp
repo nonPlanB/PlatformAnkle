@@ -98,8 +98,6 @@ void NetworkManager::connectToTcp(const QString &ip, int port) {
 
 void NetworkManager::onTcpConnected() {
     emit tcpConnectionStatus(true, "Connected to TCP server");
-    // 示例：发送数据
-    tcpSocket->write("Hello from PC!");
 }
 
 void NetworkManager::onTcpDisconnected() {
@@ -111,6 +109,42 @@ void NetworkManager::onTcpError() {
 }
 
 void NetworkManager::onTcpDataReady() {
-    QString data = tcpSocket->readAll();
-    emit tcpDataReceived(data);
+    QByteArray data = tcpSocket->readAll();
+    if (data.size() >= 10 && data[0] == static_cast<char>(0xFE) && data[1] == static_cast<char>(0xFD)) {
+        int pxAngle = (static_cast<unsigned char>(data[2]) << 8) + static_cast<unsigned char>(data[3]);
+        int pyAngle = (static_cast<unsigned char>(data[4]) << 8) + static_cast<unsigned char>(data[5]);
+        int pzAngle = (static_cast<unsigned char>(data[6]) << 8) + static_cast<unsigned char>(data[7]);
+        if (pxAngle > 0x8000) pxAngle -= 0x10000;
+        if (pyAngle > 0x8000) pyAngle -= 0x10000;
+        if (pzAngle > 0x8000) pzAngle -= 0x10000;
+        pxAngle = pxAngle / 100;
+        pyAngle = pyAngle / 100;
+        pzAngle = pzAngle / 100;
+        emit controlDataReceived(pxAngle, pyAngle, pzAngle);
+    }
+    emit tcpDataReceived(data.toHex(' '));
+}
+
+void NetworkManager::sendControlData(int x, int y, int z, int speed, int mode) {
+    if (tcpSocket->state() != QAbstractSocket::ConnectedState) {
+        emit tcpConnectionStatus(false, "Not connected to TCP server");
+        return;
+    }
+    int xAngle = x * 100;
+    int yAngle = y * 100;
+    int zAngle = z * 100;
+    QByteArray msg;
+    msg.append(static_cast<char>(0xFE));
+    msg.append(static_cast<char>(0xFD));
+    msg.append(static_cast<char>((xAngle & 0xFF00) >> 8));
+    msg.append(static_cast<char>(xAngle & 0x00FF));
+    msg.append(static_cast<char>((yAngle & 0xFF00) >> 8));
+    msg.append(static_cast<char>(yAngle & 0x00FF));
+    msg.append(static_cast<char>((zAngle & 0xFF00) >> 8));
+    msg.append(static_cast<char>(zAngle & 0x00FF));
+    msg.append(static_cast<char>(speed & 0xFF));
+    msg.append(static_cast<char>(mode & 0xFF));
+    msg.append(static_cast<char>(0xFD));
+    msg.append(static_cast<char>(0xFE));
+    tcpSocket->write(msg);
 }

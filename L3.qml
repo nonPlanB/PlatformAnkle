@@ -16,7 +16,7 @@ Entity {
             m.scale(0.2)
             m.rotate(-150+m3slider.value, Qt.vector3d(0, 1, 0));
             m.rotate(30, Qt.vector3d(1, 0, 0));
-            m.rotate(MF.findL3(rollslider.value, yawslider.value, pitchslider.value), Qt.vector3d(0, 1, 0));
+            m.rotate(MF.findL3(pxAngle, pzAngle, pyAngle), Qt.vector3d(0, 1, 0));
             return m
         }
     }

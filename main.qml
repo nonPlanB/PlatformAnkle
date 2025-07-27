@@ -21,8 +21,26 @@ ApplicationWindow {
     property font chartTitle: Qt.font({ family: "Calibri", pointSize: 16 })
     property font axisTitle: Qt.font({ family: "Calibri", pointSize: 14 })
     property var chData: ({1: [], 2: [], 3: []})
+    property int pxAngle: 0
+    property int pyAngle: 0
+    property int pzAngle: 0
     property int rspeed: 50
-    property int rmode: 0
+    property int rmode: 1
+    Timer {
+        id: controlTimer
+        interval: 50
+        running: true
+        repeat: true
+        onTriggered: {
+            networkManager.sendControlData(
+                        rollslider.value,
+                        pitchslider.value,
+                        yawslider.value,
+                        rspeed,
+                        rmode
+                        )
+        }
+    }
     Rectangle {
         id: controlsbg
         width: 200
@@ -250,7 +268,7 @@ ApplicationWindow {
                 property: "m1Value"
                 value: {
                     var p1 = Qt.vector4d(-75, -150*Math.sqrt(3), -75*Math.sqrt(3), 1);
-                    return MF.findM1(p1, rollslider.value, yawslider.value, pitchslider.value);
+                    return MF.findM1(p1, pxAngle, pzAngle, pyAngle);
                 }
             }
             Binding {
@@ -258,7 +276,7 @@ ApplicationWindow {
                 property: "m2Value"
                 value: {
                     var p2 = Qt.vector4d(-75, -150*Math.sqrt(3), 75*Math.sqrt(3), 1);
-                    return MF.findM2(p2, rollslider.value, yawslider.value, pitchslider.value);
+                    return MF.findM2(p2, pxAngle, pzAngle, pyAngle);
                 }
             }
             Binding {
@@ -266,7 +284,7 @@ ApplicationWindow {
                 property: "m3Value"
                 value: {
                     var p3 = Qt.vector4d(150, -150*Math.sqrt(3), 0, 1);
-                    return MF.findM3(p3, rollslider.value, yawslider.value, pitchslider.value);
+                    return MF.findM3(p3, pxAngle, pzAngle, pyAngle);
                 }
             }
             //WiFi输入框
@@ -386,6 +404,11 @@ ApplicationWindow {
                 }
                 function onTcpDataReceived(data) {
                     console.log("Received TCP data: " + data)
+                }
+                function onControlDataReceived(x, y, z) {
+                    pxAngle = x
+                    pyAngle = y
+                    pzAngle = z
                 }
             }
             Rectangle {
