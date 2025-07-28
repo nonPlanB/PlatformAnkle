@@ -10,8 +10,8 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     QString exePath = "D:/Afoot/SDK/LightVista/LightVista.exe";
 
-    // QProcess process;
-    // process.start(exePath, QStringList());
+    QProcess process;
+    process.start(exePath, QStringList());
 
     // 创建并初始化 PythonHandler 实例
     PythonHandler *pyHandler = new PythonHandler;
