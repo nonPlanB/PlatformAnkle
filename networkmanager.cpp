@@ -76,7 +76,7 @@ void NetworkManager::connectToWifi(const QString &ssid, const QString &password)
             checkProcess.waitForFinished();
             //转化为GBK编码
             QString output = QString::fromLocal8Bit(checkProcess.readAllStandardOutput());
-            qDebug() << "Netsh output:" << output;
+            // qDebug() << "Netsh output:" << output;
             if (output.contains(ssid)) {
                 emit wifiConnectionStatus(true, QString("Connected to %1").arg(ssid));
             } else {
@@ -122,7 +122,7 @@ void NetworkManager::onTcpDataReady() {
         pzAngle = pzAngle / 100;
         emit controlDataReceived(pxAngle, pyAngle, pzAngle);
     }
-    emit tcpDataReceived(data.toHex(' '));
+    // emit tcpDataReceived(data.toHex(' '));
 }
 
 void NetworkManager::sendControlData(int x, int y, int z, int speed, int mode) {

@@ -402,9 +402,9 @@ ApplicationWindow {
                     tcpStatusText.text = message
                     tcpStatusText.color = success ? "green" : "red"
                 }
-                function onTcpDataReceived(data) {
-                    console.log("Received TCP data: " + data)
-                }
+                // function onTcpDataReceived(data) {
+                //     console.log("Received TCP data: " + data)
+                // }
                 function onControlDataReceived(x, y, z) {
                     pxAngle = x
                     pyAngle = y
